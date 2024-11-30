@@ -1,13 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import uuid
-
+from django.contrib.auth import get_user_model
+from django.conf import settings
 
 class Organization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField(User, through='OrganizationMember')
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='OrganizationMember')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -26,7 +26,7 @@ class OrganizationMember(models.Model):
     ]
 
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     joined_at = models.DateTimeField(auto_now_add=True)
 
@@ -73,7 +73,7 @@ class APIStatus(models.Model):
 class Feedback(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     api = models.ForeignKey(API, on_delete=models.CASCADE, related_name='feedbacks')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )

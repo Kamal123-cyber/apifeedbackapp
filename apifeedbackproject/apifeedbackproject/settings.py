@@ -41,6 +41,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'useraccounts',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_framework.authtoken',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'apifeedbackproject.urls'
@@ -137,3 +145,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'useraccounts.UserAccount'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_ADAPTER = 'useraccounts.adapters.CustomAccountAdapter'
+
+# For dj-rest-auth
+REST_USE_JWT = True
+SITE_ID = 1
