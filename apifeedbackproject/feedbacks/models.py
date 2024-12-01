@@ -26,7 +26,7 @@ class OrganizationMember(models.Model):
     ]
 
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     joined_at = models.DateTimeField(auto_now_add=True)
 
@@ -36,8 +36,7 @@ class OrganizationMember(models.Model):
 
 
 class API(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
     endpoint = models.URLField()
     description = models.TextField()
@@ -73,7 +72,7 @@ class APIStatus(models.Model):
 class Feedback(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     api = models.ForeignKey(API, on_delete=models.CASCADE, related_name='feedbacks')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
