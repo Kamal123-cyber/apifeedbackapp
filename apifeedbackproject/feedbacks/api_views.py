@@ -6,7 +6,7 @@ from .models import API, APIStatus, Feedback
 from django.utils import timezone
 import requests
 from django.db.models import Avg
-from .serializers import APIStatusSerializer, APISerializer
+from .serializers import APIStatusSerializer, APISerializer, FeedbackSerializer
 
 # API View to list all APIs
 class ApiAPIView(APIView):
@@ -108,3 +108,12 @@ class APIAnalyticsAPIView(APIView):
 
         except API.DoesNotExist:
             return Response({'detail': 'API not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class FeedbackAPIView(APIView):
+    def get(self, request):
+        try:
+            feed_obj = Feedback.objects.all()
+            feed_serializer = FeedbackSerializer(feed_obj, many=True)
+            return Response(feed_serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'detail': 'Errors'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
